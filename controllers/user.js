@@ -63,9 +63,9 @@ const addUserExcercise = asyncHandler(async (req, res) => {
   const message = {
     _id: user._id,
     username: user.username,
-    description: newExercise.description,
-    duration: newExercise.duration,
     date: formattedDate,
+    duration: newExercise.duration,
+    description: newExercise.description,
   };
 
   res.json(message);
