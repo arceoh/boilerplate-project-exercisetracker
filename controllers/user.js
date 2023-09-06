@@ -99,7 +99,9 @@ const getUserExercises = asyncHandler(async (req, res) => {
     }
   }
 
-  const exercises = await Exercise.find(searchFilters).limit(limitResults);
+  const exercises = await Exercise.find(searchFilters)
+    .select("-createdAt -updatedAt -__v -_id")
+    .limit(limitResults);
 
   if (!exercises) {
     res.json({ error: "No Exercises Found" });
