@@ -40,6 +40,8 @@ const addUserExcercise = asyncHandler(async (req, res) => {
 
   const dateObj = date ? new Date(date) : new Date();
 
+  console.log("dateObj: ", dateObj);
+
   const newExercise = await Exercise.create({
     userId: userID,
     description: description,
@@ -61,7 +63,7 @@ const addUserExcercise = asyncHandler(async (req, res) => {
   const formattedDate = originalDate.toLocaleDateString(undefined, options);
 
   const message = {
-    _id: user._id,
+    _id: userID,
     username: user.username,
     date: formattedDate,
     duration: newExercise.duration,
@@ -71,6 +73,7 @@ const addUserExcercise = asyncHandler(async (req, res) => {
   res.json(message);
 });
 
+// /:_id/exercise/logs?
 const getUserExercises = asyncHandler(async (req, res) => {
   const user = await User.findOne({ _id: req.params._id });
 
@@ -96,17 +99,22 @@ const getUserExercises = asyncHandler(async (req, res) => {
     }
   }
 
-  const excercises = await Exercise.find(searchFilters).limit(limitResults);
+  const exercises = await Exercise.find(searchFilters).limit(limitResults);
 
-  if (!excercises) {
-    res.json({ error: "No Excercises Found" });
+  if (!exercises) {
+    res.json({ error: "No Exercises Found" });
   }
+
+  const formattedExercises = exercises.map((exercise) => ({
+    ...exercise.toObject(), // Convert to plain object
+    date: exercise.date.toDateString(), // Format the date field
+  }));
 
   const message = {
     _id: user._id,
     username: user.username,
-    count: excercises.length,
-    log: excercises,
+    count: exercises.length,
+    log: formattedExercises,
   };
 
   res.json(message);
