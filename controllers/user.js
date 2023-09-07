@@ -100,7 +100,7 @@ const getUserExercises = asyncHandler(async (req, res) => {
   }
 
   const exercises = await Exercise.find(searchFilters)
-    .select("-createdAt -updatedAt -__v -_id")
+    .select("-createdAt -updatedAt -__v -_id -userId")
     .limit(limitResults);
 
   if (!exercises) {
