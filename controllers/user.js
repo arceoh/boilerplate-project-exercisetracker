@@ -40,8 +40,6 @@ const addUserExcercise = asyncHandler(async (req, res) => {
 
   const dateObj = date ? new Date(date) : new Date();
 
-  console.log("dateObj: ", dateObj);
-
   const newExercise = await Exercise.create({
     userId: userID,
     description: description,
@@ -50,33 +48,10 @@ const addUserExcercise = asyncHandler(async (req, res) => {
   });
   await newExercise.save();
 
-  // Format response
-  const newDate = new Date(dateObj);
-
-  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  const formattedDate = `${weekdays[newDate.getUTCDay()]} ${
-    months[newDate.getUTCMonth()]
-  } ${newDate.getUTCDate()} ${newDate.getUTCFullYear()}`;
-
   const message = {
     _id: userID,
     username: user.username,
-    date: formattedDate,
+    date: dateObj.toDateString(),
     duration: newExercise.duration,
     description: newExercise.description,
   };
