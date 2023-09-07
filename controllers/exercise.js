@@ -6,16 +6,20 @@ const { Exercise } = require("../models/exerciseModel");
 const createExercise = asyncHandler(async (req, res) => {
   const { _id, duration, date, description } = req.body;
 
-  if (!_id || !description || !duration) {
+  const userId = req.params.id;
+
+  if (!description || !duration) {
     res.json({ error: "Fill in Required Feilds" });
   }
 
-  const user = await User.findOne({ _id: _id });
+  const uID = userId ? userId : _id;
+
+  const user = await User.findOne({ _id: uID });
   if (!user) {
     res.json({ error: "User Not Found" });
   }
 
-  console.log("_id: ", _id);
+  console.log("_id: ", user._id);
   console.log("username: ", user.username);
   console.log("duration: ", duration);
   console.log("date: ", date);
@@ -24,7 +28,7 @@ const createExercise = asyncHandler(async (req, res) => {
   const dateObj = date ? new Date(date) : new Date();
 
   const newExercise = await Exercise.create({
-    userId: _id,
+    userId: user._id,
     description: description,
     duration: duration,
     date: dateObj,
@@ -32,7 +36,7 @@ const createExercise = asyncHandler(async (req, res) => {
   await newExercise.save();
 
   const message = {
-    _id: _id,
+    _id: user._id,
     username: user.username,
     date: dateObj.toDateString(),
     duration: newExercise.duration,
