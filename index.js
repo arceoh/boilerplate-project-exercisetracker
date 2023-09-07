@@ -13,9 +13,12 @@ app.use(
     extended: true,
   })
 );
-
 app.use(cors());
 app.use(express.static("public"));
+
+const multer = require("multer");
+const upload = multer();
+app.use(upload.array());
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
