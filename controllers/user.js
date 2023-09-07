@@ -51,16 +51,27 @@ const addUserExcercise = asyncHandler(async (req, res) => {
   await newExercise.save();
 
   // Format response
-  const originalDateStr = dateObj;
-  const originalDate = new Date(originalDateStr);
+  const newDate = new Date(dateObj);
 
-  const options = {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  };
-  const formattedDate = originalDate.toLocaleDateString(undefined, options);
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const formattedDate = `${weekdays[newDate.getUTCDay()]} ${
+    months[newDate.getUTCMonth()]
+  } ${newDate.getUTCDate()} ${newDate.getUTCFullYear()}`;
 
   const message = {
     _id: userID,
