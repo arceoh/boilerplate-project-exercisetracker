@@ -26,13 +26,19 @@ const createUser = asyncHandler(async (req, res) => {
 });
 
 const addUserExcercise = asyncHandler(async (req, res) => {
-  const { userID, description, duration, date } = req.body;
+  const { _id, description, duration, date } = req.body;
 
-  if (!userID || !description || !duration) {
-    res.json({ error: "All Fields are Required" });
+  if (!_id || !description || !duration) {
+    console.log("All Fields are Required");
+    console.log("req.body", req.body);
+    console.log("userID: ", _id);
+    console.log("description: ", description);
+    console.log("duration: ", duration);
+    console.log("date: ", date);
+    res.json({ error: "Required feilds must be filled in." });
   }
 
-  const user = await User.findOne({ _id: userID });
+  const user = await User.findOne({ _id: _id });
 
   if (!user) {
     res.json({ error: "User Not Found" });
@@ -41,7 +47,7 @@ const addUserExcercise = asyncHandler(async (req, res) => {
   const dateObj = date ? new Date(date) : new Date();
 
   const newExercise = await Exercise.create({
-    userId: userID,
+    userId: _id,
     description: description,
     duration: duration,
     date: dateObj,
@@ -49,7 +55,7 @@ const addUserExcercise = asyncHandler(async (req, res) => {
   await newExercise.save();
 
   const message = {
-    _id: userID,
+    _id: _id,
     username: user.username,
     date: dateObj.toDateString(),
     duration: newExercise.duration,
