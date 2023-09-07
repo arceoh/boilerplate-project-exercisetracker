@@ -16,7 +16,7 @@ const createExercise = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ _id: uID });
   if (!user) {
-    res.json({ error: "User Not Found" });
+    res.json({ id: uID, error: "User Not Found" });
   }
 
   console.log("_id: ", user._id);

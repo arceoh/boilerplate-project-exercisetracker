@@ -11,7 +11,7 @@ const {
 
 router.post("/", createUser);
 router.get("/", getAllUser);
-router.get("/:id", getUser);
+router.get("/:_id", getUser);
 
 router.post("/:_id/exercises", addUserExcercise);
 router.get("/:_id/logs", getUserExercises);
